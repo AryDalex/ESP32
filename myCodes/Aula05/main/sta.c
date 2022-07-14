@@ -22,7 +22,7 @@ static EventGroupHandle_t wifi_events;
 #define WIFI_FAIL_BIT BIT1
 #define MAX_RETRY 10
 static int retry_cnt = 0;
-static const char *TAG = "wifi_app";
+static const char *TAG_WIFI = "wifi_app";
 static void request_page(void *);
 static esp_err_t handle_http_event(esp_http_client_event_t *);
 static void handle_wifi_connection(void *, esp_event_base_t,
@@ -68,7 +68,7 @@ static void init_wifi(void)
     }
     else
     {
-        ESP_LOGE(TAG, "failed");
+        ESP_LOGE(TAG_WIFI, "failed");
     }
 }
 
@@ -84,7 +84,7 @@ static void handle_wifi_connection(void *arg, esp_event_base_t event_base,
         if (retry_cnt++ < MAX_RETRY)
         {
             esp_wifi_connect();
-            ESP_LOGI(TAG, "wifi connect retry: %d", retry_cnt);
+            ESP_LOGI(TAG_WIFI, "wifi connect retry: %d", retry_cnt);
         }
         else
         {
@@ -94,7 +94,7 @@ static void handle_wifi_connection(void *arg, esp_event_base_t event_base,
     else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP)
     {
         ip_event_got_ip_t *event = (ip_event_got_ip_t *)event_data;
-        ESP_LOGI(TAG, "ip: %d.%d.%d.%d", IP2STR(&event->ip_info.ip));
+        ESP_LOGI(TAG_WIFI, "ip: %d.%d.%d.%d", IP2STR(&event->ip_info.ip));
         retry_cnt = 0;
         xEventGroupSetBits(wifi_events, WIFI_CONNECTED_BIT);
     }
@@ -110,7 +110,7 @@ static void request_page(void *arg)
     esp_http_client_handle_t client = esp_http_client_init(&config);
     if (esp_http_client_perform(client) != ESP_OK)
     {
-        ESP_LOGE(TAG, "http request failed");
+        ESP_LOGE(TAG_WIFI, "http request failed");
     }
     esp_http_client_cleanup(client);
     vTaskDelete(NULL);

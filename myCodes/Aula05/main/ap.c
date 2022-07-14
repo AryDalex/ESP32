@@ -29,7 +29,7 @@
 */
 
 // http://192.168.4.1/
-#define EXAMPLE_ESP_WIFI_SSID      "Roblox"
+#define EXAMPLE_ESP_WIFI_SSID      "espAry"
 #define EXAMPLE_ESP_WIFI_PASS      "1234567890"
 #define EXAMPLE_ESP_WIFI_CHANNEL   1
 #define EXAMPLE_MAX_STA_CONN       4
@@ -39,8 +39,7 @@ static const char *TAG = "wifi softAP";
 esp_netif_t *my_ap = NULL;
 QueueHandle_t xQueueHttp;
 
-static void wifi_event_handler(void* arg, esp_event_base_t event_base,
-                                    int32_t event_id, void* event_data)
+static void wifi_event_handler(void* arg, esp_event_base_t event_base, int32_t event_id, void* event_data)
 {
     if (event_id == WIFI_EVENT_AP_STACONNECTED) {
         wifi_event_ap_staconnected_t* event = (wifi_event_ap_staconnected_t*) event_data;
@@ -71,11 +70,7 @@ void wifi_init_softap(void)
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
 
-    ESP_ERROR_CHECK(esp_event_handler_instance_register(WIFI_EVENT,
-                                                        ESP_EVENT_ANY_ID,
-                                                        &wifi_event_handler,
-                                                        NULL,
-                                                        NULL));
+    ESP_ERROR_CHECK(esp_event_handler_instance_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, NULL, NULL));
 
     wifi_config_t wifi_config = {
         .ap = {
@@ -95,8 +90,7 @@ void wifi_init_softap(void)
     ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_AP, &wifi_config));
     ESP_ERROR_CHECK(esp_wifi_start());
 
-    ESP_LOGI(TAG, "wifi_init_softap finished. SSID:%s password:%s channel:%d",
-             EXAMPLE_ESP_WIFI_SSID, EXAMPLE_ESP_WIFI_PASS, EXAMPLE_ESP_WIFI_CHANNEL);
+    ESP_LOGI(TAG, "wifi_init_softap finished. SSID:%s password:%s channel:%d", EXAMPLE_ESP_WIFI_SSID, EXAMPLE_ESP_WIFI_PASS, EXAMPLE_ESP_WIFI_CHANNEL);
 }
 
 void app_main(void)
